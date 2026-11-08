@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-kit",
+      "description": "Connect AI agents to Kit (ConvertKit) using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-kit/SKILL.md": "06ec5c74251acad8139f87b180a89cd8a4327e05e5b78e3bfbad54ca80a04788"
+  }
+}
