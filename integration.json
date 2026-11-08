@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "id": "kit-mcp",
+  "kind": "provider-connector",
+  "artifactType": "connector",
+  "qualityVersion": 2,
+  "title": "Kit (ConvertKit) MCP server",
+  "description": "Find subscribers and explicitly create an inactive subscriber record without activating a subscription.",
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "product": "pipmcp",
+  "appSlug": "kit",
+  "appName": "Kit (ConvertKit)",
+  "operationIds": [
+    "kit_list_subscribers",
+    "kit_create_inactive_subscriber"
+  ],
+  "sourceRevision": "210fb47c8aa3d438f3c5665c1d809874478720ddef40ce646c92ae52aaa1b1a1",
+  "evidence": [
+    "Actual tools/call and direct-provider request contract tests"
+  ],
+  "provenance": [
+    "https://developers.kit.com/api-reference/v4.json"
+  ],
+  "attributionSlug": "github-kit-mcp",
+  "connectorId": "kit",
+  "connector": {
+    "id": "kit",
+    "name": "Kit (ConvertKit)",
+    "version": "0.1.0",
+    "baseUrl": "https://api.kit.com/v4",
+    "auth": {
+      "type": "header",
+      "env": "KIT_API_KEY",
+      "header": "X-Kit-Api-Key"
+    },
+    "tools": [
+      {
+        "name": "kit_list_subscribers",
+        "description": "Read a page of subscribers with optional email filtering.",
+        "method": "GET",
+        "path": "/subscribers",
+        "readOnly": true,
+        "approvalRequired": false,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "per_page": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "email_address": {
+              "type": "string",
+              "format": "email"
+            },
+            "after": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {
+            "per_page": "per_page",
+            "email_address": "email_address",
+            "after": "after"
+          },
+          "body": {}
+        },
+        "sampleArguments": {
+          "per_page": 10
+        },
+        "evidence": {
+          "state": "documented",
+          "providerLiveValidation": "not-run"
+        },
+        "provenance": [
+          "https://developers.kit.com/api-reference/v4.json"
+        ]
+      },
+      {
+        "name": "kit_create_inactive_subscriber",
+        "description": "Create an inactive subscriber; this does not subscribe them to email marketing.",
+        "method": "POST",
+        "path": "/subscribers",
+        "readOnly": false,
+        "approvalRequired": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email_address": {
+              "type": "string",
+              "format": "email"
+            },
+            "first_name": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "email_address"
+          ],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {},
+          "body": {
+            "email_address": "email_address",
+            "first_name": "first_name"
+          }
+        },
+        "sampleArguments": {
+          "email_address": "sandbox@example.com",
+          "first_name": "Sandbox"
+        },
+        "evidence": {
+          "state": "documented",
+          "providerLiveValidation": "not-run"
+        },
+        "body": {
+          "state": "inactive"
+        },
+        "provenance": [
+          "https://developers.kit.com/api-reference/v4.json"
+        ]
+      }
+    ],
+    "workflow": {
+      "name": "Kit (ConvertKit) authorized workflow",
+      "description": "Find subscribers and explicitly create an inactive subscriber record without activating a subscription.",
+      "steps": [
+        "kit_list_subscribers",
+        "kit_create_inactive_subscriber"
+      ]
+    },
+    "provenance": [
+      "https://developers.kit.com/api-reference/v4.json"
+    ],
+    "sourceEvidence": {
+      "state": "documented",
+      "providerLiveValidation": "not-run",
+      "checkedAt": "2026-11-08",
+      "operationCount": 2,
+      "kind": "official-reference",
+      "sha256": "41af289d5631191bad426ba3265f6b061221e5a5a79314e68e4e204c3e0fbabc",
+      "sources": [
+        {
+          "url": "https://developers.kit.com/api-reference/v4.json",
+          "sha256": "41af289d5631191bad426ba3265f6b061221e5a5a79314e68e4e204c3e0fbabc",
+          "checkedAt": "2026-11-08T13:11:26.950982+00:00"
+        }
+      ]
+    },
+    "setup": {
+      "requiresPipMcpAccount": false,
+      "credentialsHelpUrl": "https://developers.kit.com/api-reference/v4.json",
+      "instructions": "Use your own Kit v4 API key (X-Kit-Api-Key). Creating an inactive record does not establish consent or subscribe the person; review downstream Kit automation before writes."
+    },
+    "sampleWarning": "Example IDs and email addresses are placeholders. Replace them with records and recipients you are authorized to access. Samples do not authorize writes. HTTP/fixture success does not prove provider execution or email delivery.",
+    "appSlug": "kit",
+    "repoId": "kit-mcp",
+    "product": "pipmcp",
+    "artifactType": "connector",
+    "sourceRevision": "210fb47c8aa3d438f3c5665c1d809874478720ddef40ce646c92ae52aaa1b1a1",
+    "capabilityEvidence": {
+      "local": {
+        "level": "Tested",
+        "operations": [
+          {
+            "name": "kit_list_subscribers",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          },
+          {
+            "name": "kit_create_inactive_subscriber",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          }
+        ],
+        "evidenceRefs": [
+          "Provider request/stdio contract tests"
+        ],
+        "mode": "local"
+      },
+      "managed": {
+        "level": "Documented",
+        "operations": [
+          {
+            "name": "kit_list_subscribers",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          },
+          {
+            "name": "kit_create_inactive_subscriber",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          }
+        ],
+        "evidenceRefs": [],
+        "mode": "managed"
+      }
+    },
+    "managedAvailability": {
+      "status": "listed",
+      "checkedAt": "2026-11-08T13:20:45.156456+00:00"
+    }
+  },
+  "capabilityEvidence": {
+    "local": {
+      "level": "Tested",
+      "operations": [
+        {
+          "name": "kit_list_subscribers",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "kit_create_inactive_subscriber",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        }
+      ],
+      "evidenceRefs": [
+        "Provider request/stdio contract tests"
+      ],
+      "mode": "local"
+    },
+    "managed": {
+      "level": "Documented",
+      "operations": [
+        {
+          "name": "kit_list_subscribers",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "kit_create_inactive_subscriber",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        }
+      ],
+      "evidenceRefs": [],
+      "mode": "managed"
+    }
+  },
+  "utility": {
+    "problem": "Find subscribers and explicitly create an inactive subscriber record without activating a subscription.",
+    "output": "Actual provider API results through local MCP tools"
+  },
+  "providerDocs": "https://developers.kit.com/api-reference/v4.json"
+}
